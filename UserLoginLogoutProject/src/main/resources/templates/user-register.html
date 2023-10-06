@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+		crossorigin="anonymous"></script>
+
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="/getrequest.js"></script>
+
+	<style>
+		.card-registration .select-input.form-control[readonly]:not([disabled]) {
+			font-size: 1rem;
+			line-height: 2.15;
+			padding-left: .75em;
+			padding-right: .75em;
+		}
+
+		.card-registration .select-arrow {
+			top: 13px;
+		}
+
+		.error {
+			color: red;
+		}
+	</style>
+	<title>Hello, world!</title>
+</head>
+
+<body>
+	<section class="h-100 bg-dark">
+		<div class="container py-5 h-100">
+			<div class="row d-flex justify-content-center align-items-center h-100">
+				<div class="col">
+					<div class="card card-registration my-4">
+						<div class="row g-0">
+							<div class="col-xl-6 d-none d-xl-block">
+								<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp"
+									alt="Sample photo" class="img-fluid"
+									style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
+							</div>
+							<div class="col-xl-6">
+								<div class="card-body p-md-5 text-black">
+									<h3 class="mb-5 text-uppercase">Registration form</h3>
+									<h6 th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}">
+									</h6>
+
+									<form th:action="@{/registerUser}" th:object="${user}" method="post">
+
+										<div class="row">
+											<div class="col-md-6 mb-4">
+												<div class="form-outline">
+													<input type="text" id="form3Example1m" th:field="*{firstName}"
+														class="form-control form-control-lg" />
+
+													<label class="form-label" for="form3Example1m">First name</label>
+													<ul>
+														<li th:each="err : ${#fields.errors('firstName')}"
+															th:text="${err}" class="error" />
+													</ul>
+												</div>
+											</div>
+											<div class="col-md-6 mb-4">
+												<div class="form-outline">
+													<input type="text" id="form3Example1n" th:field="*{lastName}"
+														class="form-control form-control-lg" />
+													<label class="form-label" for="form3Example1n">Last name</label>
+													<ul>
+														<li th:each="err : ${#fields.errors('lastName')}"
+															th:text="${err}" class="error" />
+													</ul>
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-6 mb-4">
+												<div class="form-outline">
+													<input type="email" id="email" th:field="*{email}"
+														class="form-control form-control-lg" />
+													<label class="form-label" for="form3Example1m1">Email</label>
+													<ul>
+														<li th:each="err : ${#fields.errors('email')}"
+															th:text="${err}" class="error" />
+													</ul>
+												</div>
+												<span id="emailMsg" style="color: red;"></span>
+											</div>
+											<div class="col-md-6 mb-4">
+												<div class="form-outline">
+													<input type="number" id="form3Example1n1" th:field="*{phno}"
+														class="form-control form-control-lg" />
+													<label class="form-label" for="form3Example1n1">Phone No</label>
+													<ul>
+														<li th:each="err : ${#fields.errors('phno')}"
+															th:text="${err}" class="error" />
+													</ul>
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-6 mb-4">
+												<div class="form-outline">
+													<input type="date" id="form3Example9" th:field="*{dob}"
+														class="form-control form-control-lg" />
+													<label class="form-label" for="form3Example9">DOB</label>
+													<ul>
+														<li th:each="err : ${#fields.errors('dob')}"
+															th:text="${err}" class="error" />
+													</ul>
+												</div>
+											</div>
+											<div class="col-md-6 mb-4">
+												<div class="form-outline">
+
+													<label class="form-label" for="form3Example1n1">Gender: </label>
+													<input class="form-check-input" type="radio" th:field="*{gender}"
+														name="inlineRadioOptions" id="femaleGender" value="option1" />
+													<label class="form-check-label" for="femaleGender">Male</label>
+													<input class="form-check-input" type="radio" th:field="*{gender}"
+														name="inlineRadioOptions" id="femaleGender" value="option1" />
+													<label class="form-check-label" for="femaleGender">Female</label>
+
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md">
+												<select class="form-select" id="countryList">
+													<option value="">--select--</option>
+													<option th:each="country:${countrylist}" th:value="${country.id}"
+														th:text="${country.name}"></option>
+												</select>
+											</div>
+
+											<div class="col-md">
+												<select class="form-select" id="stateList">
+													<option value="">--state--</option>
+												</select>
+
+											</div>
+											<div class="col-md">
+
+												<select class="form-select">
+													<option value="1">City</option>
+													<option value="2">Option 1</option>
+													<option value="3">Option 2</option>
+													<option value="4">Option 3</option>
+												</select>
+
+											</div>
+										</div>
+
+
+
+										<div class="d-flex justify-content-end pt-3">
+											<button type="reset" class="btn btn-light btn-lg">Reset all</button>
+											<button type="submit" id="createAccBtn"
+												class="btn btn-warning btn-lg ms-2">Submit
+												form</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Optional JavaScript; choose one of the two! -->
+
+	<!-- Option 1: Bootstrap Bundle with Popper -->
+
+	<!-- Option 2: Separate Popper and Bootstrap JS -->
+	<!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    -->
+</body>
+
+</html>

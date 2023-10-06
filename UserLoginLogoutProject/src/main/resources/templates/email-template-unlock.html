@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Email Template</title>
+</head>
+
+<body>
+	<h1 th:text="${password}">Unlock Account</h1>
+	<p th:text="'Hello, '+${firstName}+','+${lastName}"></p>
+	<p th:text="'Temporary Password: '+${password}"></p>
+	<a th:href="@{'http://localhost:8082/unlock/'+ ${userId}}"><u>Link to unlock account.</u></a>
+</body>
+
+</html>
