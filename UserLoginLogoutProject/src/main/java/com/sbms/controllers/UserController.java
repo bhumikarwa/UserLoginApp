@@ -1,11 +1,8 @@
 package com.sbms.controllers;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,13 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.sbms.entities.Loginform;
-import com.sbms.entities.State;
 import com.sbms.entities.UnlockAccount;
 import com.sbms.entities.User;
-import com.sbms.response.MyResponse;
 import com.sbms.services.UserService;
 
 import jakarta.validation.Valid;
@@ -72,10 +66,10 @@ public class UserController {
 		Optional<User> userExist = service.checkUserExistByEmail(login.getEmail());
 		if (userExist.isPresent()) {
 			User user1 = userExist.get();
-			if (user1.getIsAccountLocked() == 0) {
+			if (user1.getIs_acc_locked() == 0) {
 				if (service.checkLoginCredentials(login)) {
 					redirectAttributes.addFlashAttribute("message",
-							user1.getFirstName() + " " + user1.getLastName() + ", login successfully!");
+							user1.getFirst_name() + " " + user1.getLast_name() + ", login successfully!");
 					redirectAttributes.addFlashAttribute("user", user1);
 					redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 					return "welcome";
@@ -86,7 +80,7 @@ public class UserController {
 				}
 			} else {
 				redirectAttributes.addFlashAttribute("message",
-						user1.getFirstName() + " " + user1.getLastName() + ", your account is locked.");
+						user1.getFirst_name() + " " + user1.getLast_name() + ", your account is locked.");
 				redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
 				return "redirect:/login";
 			}
@@ -114,7 +108,7 @@ public class UserController {
 			if (unlockAccount.getNewPassword().equals(unlockAccount.getConfirmPassword())) {
 				Integer updatePassword = service.updatePassword(unlockAccount);
 				if (updatePassword > 0) {
-					redirectAttributes.addFlashAttribute("message", user.getFirstName() + " " + user.getLastName()
+					redirectAttributes.addFlashAttribute("message", user.getFirst_name() + " " + user.getLast_name()
 							+ ", your account is unlocked. Please proceed with login.");
 					redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 					return "redirect:/login";
@@ -139,7 +133,7 @@ public class UserController {
 		Optional<User> userExist = service.checkUserExistByEmail(email);
 		if (userExist.isPresent()) {
 			User user = userExist.get();
-			if (user.getIsAccountLocked() == 0) {
+			if (user.getIs_acc_locked() == 0) {
 				String msg = service.sendEmailForforgotPassword(user);
 				if (msg.equals("Success")) {
 					redirectAttributes.addFlashAttribute("message",
@@ -175,28 +169,20 @@ public class UserController {
 		}
 	}
 
-	/*
-	 * @ResponseBody
-	 * 
-	 * @GetMapping("/getState/{countryId}") public String
-	 * getUsers(@PathVariable("countryId") Integer countryId) { List<State>
-	 * stateList = service.getStateList(countryId); String jsonString = null; try {
-	 * jsonString = new ObjectMapper().writeValueAsString(stateList); } catch
-	 * (JsonProcessingException e) { e.printStackTrace(); } return jsonString; }
-	 */
-
+	
 	@ResponseBody
-	@GetMapping("/getState")
-	public ResponseEntity<Object> getStateList(@RequestParam("countryId") Integer countryId) {
-		List<State> stateList = service.getStateList(countryId);
-		MyResponse<List<State>> response = new MyResponse<>("success", stateList);
-		return new ResponseEntity<Object>(response, HttpStatus.OK);
+	@GetMapping("loadStatesByCountry/{id}")
+	public String loadStatesByCountry(@PathVariable("id") int id) {
+		Gson gson = new Gson();
+		return gson.toJson(service.getStateList(id));
 	}
-
-	@GetMapping("/city/{stateId}")
-	public String getCityList(@PathVariable("stateId") Integer stateId, Model model) {
-		model.addAttribute("city-list", service.getCityList(stateId));
-		return "user-register";
+	
+	@ResponseBody
+	@GetMapping("loadCitiesByState/{id}")
+	public String loadCitiesByState(@PathVariable("id") int id) {
+		Gson gson = new Gson();
+		return gson.toJson(service.getCityList(id));
 	}
+	
 
 }

@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.sbms.entities.City;
+import com.sbms.entities.CityEntity;
 import com.sbms.entities.Country;
 import com.sbms.entities.Loginform;
 import com.sbms.entities.State;
+import com.sbms.entities.StateEntity;
 import com.sbms.entities.UnlockAccount;
 import com.sbms.entities.User;
 
@@ -14,8 +16,8 @@ public interface UserService {
 	
 	public String saveUser(User user);
 	public List<Country> getcountryList();
-	public List<State> getStateList(Integer id);
-	public List<City> getCityList(Integer id);
+	public List<StateEntity> getStateList(Integer id);
+	public List<CityEntity> getCityList(Integer id);
 	
 	public boolean checkLoginCredentials(Loginform loginform);
 	public Optional<User> checkPasswordCredentials(String password);

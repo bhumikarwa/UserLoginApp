@@ -26,50 +26,52 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="user")
+@Table(name = "user")
 public class User {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	 @NotEmpty(message = "User's first name cannot be empty.")
-	private String firstName;
-	 
-	 @NotEmpty(message = "User's last name cannot be empty.")
-	private String lastName;
-	 
-	 @Email(message = "Enter valid email")
-	 @NotEmpty(message = "Email should not ne empty")
+
+	@NotEmpty(message = "User's first name cannot be empty.")
+	private String first_name;
+
+	@NotEmpty(message = "User's last name cannot be empty.")
+	private String last_name;
+
+	@Email(message = "Enter valid email")
+	@NotEmpty(message = "Email should not ne empty")
 	private String email;
-	 
+
 	private String gender;
-	
-    @NotNull
-    @Size(max = 10, min = 10, message = "Mobile number should be of 10 digits")
-    @Pattern(regexp = "[7-9][0-9]{9}", message = "Mobile number is invalid!!")
-	private Long phno;
-    
-    @NotNull(message = "Please enter birth date")
-    @Past(message = "Birth date should be less than current date!!")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+
+	@NotNull
+	@Size(max = 10, min = 10, message = "Mobile number should be of 10 digits")
+	@Pattern(regexp = "[7-9][0-9]{9}", message = "Mobile number is invalid!!")
+	private String phno;
+
+	@NotNull(message = "Please enter birth date")
+	@Past(message = "Birth date should be less than current date!!")
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate dob;
-    
+
 	private String country;
 	private String state;
 	private String city;
 	private String password;
-	private String activeSw ="y";
-	private Integer isAccountLocked = 1;
 	
+	
+	private String active_sw = "y";
+	private Integer is_acc_locked = 1;
+
 	@CreationTimestamp
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	@Column(name="created_date",updatable = false)
+	@Column(name = "created_date", updatable = false)
 	private LocalDate createdDate;
-	
+
 	@UpdateTimestamp
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	@Column(name="updated_date",insertable = false)
+	@Column(name = "updated_date", insertable = false)
 	private LocalDate updatedDate;
 
 }

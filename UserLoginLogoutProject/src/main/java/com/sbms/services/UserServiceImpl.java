@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
 import com.sbms.entities.City;
+import com.sbms.entities.CityEntity;
 import com.sbms.entities.Country;
 import com.sbms.entities.Loginform;
 import com.sbms.entities.State;
+import com.sbms.entities.StateEntity;
 import com.sbms.entities.UnlockAccount;
 import com.sbms.entities.User;
 import com.sbms.repos.CityRepo;
@@ -90,18 +92,18 @@ public class UserServiceImpl implements UserService {
 		return countryRepo.findAll();
 	}
 
-	public List<State> getStateList(Integer id) {
-		return stateRepo.findByCountryId(id);
+	public List<StateEntity> getStateList(Integer id) {
+		return stateRepo.findByCountry(id);
 	}
 
-	public List<City> getCityList(Integer id) {
-		return cityRepo.findByStateId(id);
+	public List<CityEntity> getCityList(Integer id) {
+		return cityRepo.findByState(id);
 	}
 
 	public String sendEmailForforgotPassword(User user) {
 		Context context = new Context();
-		context.setVariable("firstName", user.getFirstName());
-		context.setVariable("lastName", user.getLastName());
+		context.setVariable("firstName", user.getFirst_name());
+		context.setVariable("lastName", user.getLast_name());
 		context.setVariable("password", user.getPassword());
 		try {
 			emailUtils.sendEmailWithHtmlTemplate(user.getEmail(), "Reset Password", "email-template-forgot-password",context);
@@ -113,8 +115,8 @@ public class UserServiceImpl implements UserService {
 
 	public String sendEmailToUnlockAccount(User user) {
 		Context context = new Context();
-		context.setVariable("firstName", user.getFirstName());
-		context.setVariable("lastName", user.getLastName());
+		context.setVariable("firstName", user.getFirst_name());
+		context.setVariable("lastName", user.getLast_name());
 		context.setVariable("password", user.getPassword());
 		context.setVariable("userId", user.getId());
 		try {

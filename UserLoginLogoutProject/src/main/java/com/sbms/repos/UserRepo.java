@@ -21,7 +21,7 @@ public interface UserRepo extends JpaRepository<User, Integer> {
 	
 	@Transactional
 	@Modifying(clearAutomatically = true)
-	@Query(" update User user set user.password=:password,user.isAccountLocked=:isAccountLocked where user.id=:userId ")
+	@Query(" update User user set user.password=:password,user.is_acc_locked=:isAccountLocked where user.id=:userId ")
 	public Integer updatePassword(@Param("userId")Integer userId,@Param("isAccountLocked")Integer isAccountLocked, @Param("password")String password);
 
 }
